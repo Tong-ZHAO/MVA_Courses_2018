@@ -14,29 +14,29 @@ This year, 42 courses are provided by many top researchers all over Europe. The 
 
 #### Data / Modeling
 
-* Topological data analysis for imaging and machine learning: by Frédéric Chazal (INRIA), Julien Tierny (CNRS)
-* Introduction à l'imagerie numérique: by Julie Delon (Université Paris Descartes), Yann Gousseau (Telecom ParisTech)
-* Object recognition and computer vision (RECVIS): by Ivan Lpatev, Jean Ponce, Cordelia Schmid, Josef Sivic (ENS Ulm)
-* Sub-pixel image processing: by Lionel Moisan (Université Paris Descartes)
+* **Topological data analysis for imaging and machine learning**: by Frédéric Chazal (INRIA), Julien Tierny (CNRS)
+* **Introduction à l'imagerie numérique**: by Julie Delon (Université Paris Descartes), Yann Gousseau (Telecom ParisTech)
+* **Object recognition and computer vision (RECVIS)**: by Ivan Lpatev, Jean Ponce, Cordelia Schmid, Josef Sivic (ENS Ulm)
+* **Sub-pixel image processing**: by Lionel Moisan (Université Paris Descartes)
 
 #### Learning
 
-* Convex optimization and applications in machine learning: by Alexandre d'Aspremont, (CNRS & Ecole Polytechnique)
-* Probabilistic graphical models (PGM): by Francis Bach (INRIA), Nicolas Chopin (ENSAE)
-* Reinforcement learning: by Alessandro Lazaric (FAIR)
-* Deep Learning: by Vincent Lepetit (Unniversité de Bordeaux)
+* **Convex optimization and applications in machine learning**: by Alexandre d'Aspremont, (CNRS & Ecole Polytechnique)
+* **Probabilistic graphical models (PGM)**: by Francis Bach (INRIA), Nicolas Chopin (ENSAE)
+* **Reinforcement learning**: by Alessandro Lazaric (FAIR)
+* **Deep Learning**: by Vincent Lepetit (Unniversité de Bordeaux)
 
 
 ### S2
 
 #### Data / Modeling
-* Nuages de points et modélisation 3D: by François Goulette, Jean-Emmanuel Deschaud (MINES ParisTech), Tamy Boubekeur (Telecom ParisTech)
-* Deformable models and geodesic methods for image analysis: by Laurent COHEN, Gabriel PEYRE (CNRS)
-* Statistical computing on manifolds and data assimilation (Medical Imaging): by Hervé Delingette, Xavier Pennec (INRIA Sophia-Antipolis)
-* Géométrie et espaces de formes: by  Alain Trouvé (ENS de Cachan), Joan Alexis Glaunès (Université Paris Descartes)
+* **Nuages de points et modélisation 3D**: by François Goulette, Jean-Emmanuel Deschaud (MINES ParisTech), Tamy Boubekeur (Telecom ParisTech)
+* **Deformable models and geodesic methods for image analysis**: by Laurent COHEN, Gabriel PEYRE (CNRS)
+* **Statistical computing on manifolds and data assimilation (Medical Imaging)**: by Hervé Delingette, Xavier Pennec (INRIA Sophia-Antipolis)
+* **Géométrie et espaces de formes**: by  Alain Trouvé (ENS de Cachan), Joan Alexis Glaunès (Université Paris Descartes)
 
 #### Learning
-* Kernel methods for machine learning: by Julien Mairal(INRIA), Jean-Philippe Vert (Mines ParisTech)
-* Approches géométriques en apprentissage statistique - l’exemple des données longitudinales: by Stanley Durrleman(INRIA)
-* Apprentissage par Réseaux de Neurones Profonds: by Stéphane Mallat(ENS Ulm)
-* Deep Learning in Practice: by Guillaume Charpiat (INRIA), Edouard Oyallon (INRIA)
+* **Kernel methods for machine learning**: by Julien Mairal(INRIA), Jean-Philippe Vert (Mines ParisTech)
+* **Approches géométriques en apprentissage statistique - l’exemple des données longitudinales**: by Stanley Durrleman(INRIA)
+* **Apprentissage par Réseaux de Neurones Profonds**: by Stéphane Mallat(ENS Ulm)
+* **Deep Learning in Practice**: by Guillaume Charpiat (INRIA), Edouard Oyallon (INRIA)
