@@ -1,6 +1,6 @@
 # MVA Courses 2018 - 2019
 
-This repository contains all the Homeworks / Exercices / Projects of the courses I took during M2 MVA during the academic year 2018 - 2019. 
+This repository contains all the Homeworks / Exercices / Projects of the courses I took during M2 MVA in the academic year 2018 - 2019. 
 
 ## About MVA
 
