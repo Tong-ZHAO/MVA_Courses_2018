@@ -1,0 +1,74 @@
+\documentclass[11pt]{article}
+
+    \usepackage{geometry, amsmath, amsthm, latexsym, amssymb, graphicx}
+    \usepackage{dsfont}
+    \usepackage{mathrsfs}
+    \usepackage[utf8]{inputenc}
+    \usepackage[numbered,framed]{matlab-prettifier}
+    \usepackage{filecontents}
+    \usepackage[francais,english]{babel}
+    \usepackage{setspace}
+    \usepackage{verbatim}
+    \usepackage{mathrsfs}
+
+    \renewcommand{\baselinestretch}{1.8} 
+
+    \geometry{margin=1in, headsep=0.25in}
+    \graphicspath{{./imgs/}}
+    
+    \parindent 0in
+    \parskip 12pt
+    
+    \begin{document}
+    
+    \title{HWK5 - Géométrie et espaces de formes}
+    
+    \thispagestyle{empty}
+    
+    \begin{center}
+    {\LARGE \bf Géométrie et Espaces de Formes - Exercice 6}\\
+    \vspace{1em}
+    {\large Tong ZHAO (tong.zhao@eleves.enpc.fr)}\\
+    \end{center}
+
+    \textbf{Exo 6.1}
+
+    Soit $(\varphi_n)_{n \ge 0}$ une suite minimisante, on a: 
+
+    \vspace{-3em} 
+    $$\sup_n d_{G} (Id, \varphi_n) < \infty$$
+    \vspace{-4em}
+
+    Par suite $\exists\ (u_n) \in (L^2_V)^\mathbb{N}$ tel que $\varphi_n = \phi_1^{u_n}$
+    et $\|u_n\|_2 = d_{G} (Id, \varphi_n)$. $\|u_n\|_2$ est borné en $n$. Il existe $u_{n_k}$ qui converge faiblement vers $u_\infty$.
+    On a donc: 
+    
+    \vspace{-3em}
+    $$\|u_\infty\|_2 \le \lim \|u_{n_k}\|_2$$
+    \vspace{-4em}
+    
+    On a $\varphi_\infty \in G $ et $\varphi_\infty \overset{\underset{\triangle}{}}{=} \phi_1^\infty$, alors:
+    
+    \vspace{-3em}
+    $$d_{G} (Id, \varphi_\infty) \le \|u_\infty\|_2 \le \lim d_{G}(Id, \varphi_{n_k})$$
+    \vspace{-4em}
+
+    Par la continuté faiblement du flot, $\varphi_{n_k}$ converge compacte uniformément vers $\varphi_\infty$
+    d'où $E(\varphi_\infty) \le \lim E(\varphi_{n_k})$. $ d_{G} (\varphi, \varphi') \ge \|u_\infty\|_2 \ge \|u_\infty\|_1 \ge d_G(\varphi, \varphi')$.
+    
+    Ainsi:
+
+    \vspace{-5em}
+    \begin{align*}
+      J(\varphi_\infty) &= R(d_{G}(Id, \varphi_\infty)) + E(\varphi_\infty) \\
+      R(d_{G}(Id, \varphi_\infty)) &= \underline{\lim} R(d_{G} (Id, \varphi_\infty)) \\
+      E(\varphi_\infty) &= \underline{\lim} E(\varphi_\infty)
+    \end{align*}
+    \vspace{-4em}
+
+    donc $\inf J(\varphi) \le J(\varphi_\infty) = \underline{\lim} R(d_{G} (Id, \varphi_\infty)) + \underline{\lim} E(\varphi_\infty) \le \underline{\lim} J(\varphi_n) = \inf J(\varphi)$.
+
+    On en déduit alors qu'il existe $\varphi^* \in G_V$ tel que $J(\varphi^*) = \inf_{\varphi \in G_V} J(\varphi)$.
+
+
+\end{document}

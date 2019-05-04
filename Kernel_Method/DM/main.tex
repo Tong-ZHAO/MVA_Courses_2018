@@ -1,0 +1,449 @@
+\documentclass[11pt]{article}
+
+    \usepackage{geometry, amsmath, amsthm, latexsym, amssymb, graphicx}
+    \usepackage{dsfont}
+    \usepackage[utf8]{inputenc}
+    \usepackage[numbered,framed]{matlab-prettifier}
+    \usepackage{filecontents}
+    \usepackage[francais,english]{babel}
+    \usepackage{setspace}
+    \usepackage{verbatim}
+    \usepackage{mathrsfs}
+    \usepackage{bbm}
+
+    \renewcommand{\baselinestretch}{1.8} 
+
+    \geometry{margin=1in, headsep=0.25in}
+    \graphicspath{{./imgs/}}
+    
+    \parindent 0in
+    \parskip 12pt
+    
+    \begin{document}
+    
+    \title{HWK - Kernel Methods in Machine Learning}
+    
+    \thispagestyle{empty}
+    
+    \begin{center}
+    {\LARGE \bf Kernel Methods in Machine Learning - Homework}\\
+    \vspace{1em}
+    {\large Tong ZHAO (tong.zhao@eleves.enpc.fr)}\\
+    \end{center}
+
+    \section*{Exercise 1}
+
+    \textbf{(1)} For $\forall n \in \mathbb{N}$, $x_1, \cdots, x_n \in \mathcal{X}$, $c_1, \cdots, c_n \in \mathbb{R}$, we have:
+
+    \vspace{-4em}
+    \begin{align*}
+      \sum_{i=1}^n \sum_{j=1}^n c_i c_j K(x_i, x_j) &= \sum_{i=1}^n \sum_{j=1}^n c_i c_j \cos(x_i - x_j) \\
+      &= \sum_{i=1}^n \sum_{j=1}^n c_i c_j \Big ( \cos x_i \cos x_j + \sin x_i \sin x_j \Big ) \\
+      &= \sum_{i=1}^n c_i \cos x_i \Big ( \sum_{j=1}^n \cos x_j \Big ) + \sum_{i=1}^n c_i \sin x_i \Big ( \sum_{j=1}^n \sin x_j \Big ) \\
+      &= \|\sum_{i=1}^n c_i \cos x_i\|^2  + \|\sum_{i=1}^n c_i \sin x_i\|^2 \ge 0
+    \end{align*}
+    \vspace{-4em}
+
+    So we conclude that the kernel $K(x, y) = \cos(x-y)$ is a positive definite kernel.
+
+    \textbf{(2)} For any $x, y \in \mathcal{X}$, $K(x,y) = \cfrac{1}{1-x^Ty}$ can be expanded by its Maclaurin Series: $\cfrac{1}{1-x^Ty} = \sum_{k=0}^\infty (x^Ty)^k$.
+    It converges since $\|x\|_2 < 1$ and $\|y\|_2 < 1$.
+
+    For $\forall n \in \mathbb{N}$, $x_1, \cdots, x_n \in \mathcal{X}$, $c_1, \cdots, c_n \in \mathbb{R}$, we have:
+    
+    \vspace{-4em}
+    \begin{align*}
+      \sum_{i=1}^n \sum_{j=1}^n c_i c_j K(x_i, x_j) &= \sum_{i=1}^n \sum_{j=1}^n c_i c_j \frac{1}{1-x_i^T x_j} \\
+      &= \sum_{i=1}^n \sum_{j=1}^n c_i c_j \sum_{k=1}^\infty (x_i^T x_j)^k \\
+      &= \sum_{k=1}^\infty \Big (\sum_{i=1}^n c_i^{1/k} x_i^T (\sum_{j=1}^n c_j^{1/k} x_j) \Big )^k \\
+      &= \sum_{k=1}^\infty \Big (\sum_{i=1}^n c_i^{1/k} x_i^T \Big )^{2k} \ge 0
+    \end{align*}
+    \vspace{-4em}
+
+    So we conclude that the kernel $K(x,y)=\cfrac{1}{1-x^Ty}$ is positive definite.
+
+    \textbf{(3)} We consider a feature transformation $\Phi: \mathcal{X} \to [-1, 1]$ defined by $\Phi (A) = \mathbbm{1}_A - P(A)$, 
+    where the indicator function $\mathbbm{1}_A$ takes 1 on the set A and 0 otherwise.
+    The inner product of this transformation between two set $A, B \subset \mathcal{A}$ is thus:
+
+    \vspace{-4em}
+    \begin{align*}
+    \left \langle \Phi (A) , \Phi(B) \right \rangle &= \int_{x \in \mathcal{A}} \big (\mathbbm{1}_{x \in A} - P(A) \big ) (\mathbbm{1}_{x \in B} - P(B) \big ) d\mu x \\
+    &= \int_{x \in \mathcal{A}} \mathbbm{1}_{x \in A}\mathbbm{1}_{x \in B} d\mu x - P(A) \int_{x \in \mathcal{A}} \mathbbm{1}_{x \in B} d\mu x \\
+    &\mbox{\quad \quad} -P(B) \int_{x \in \mathcal{A}} \mathbbm{1}_{x \in A} d\mu x + P(A)P(B)\int_{x \in \mathcal{A}} d\mu x \\
+    &= P(A \cap B) - P(A)P(B) - P(B)P(A) + P(A)P(B) \\
+    &= P(A \cap B) - P(A)P(B)
+    \end{align*}
+    \vspace{-4em}
+
+    Now we prove that the kernel $K(A, B) = P(A \cap B) - P(A)P(B) = \left \langle \Phi (A) , \Phi(B) \right \rangle$ is positive definite.
+    For $\forall n \in \mathbb{N}$, $A_1, \cdots, A_n \in \mathcal{A}$, $c_1, \cdots, c_n \in \mathbb{R}$, we have:
+ 
+
+    \vspace{-4em}
+    \begin{align*}
+      \sum_{i=1}^n \sum_{j=1}^n c_i c_j K(A_i, A_j) &= \sum_{i=1}^n \sum_{j=1}^n c_i c_j \left \langle \Phi (A_i) , \Phi (A_j) \right \rangle  \\
+      &= \left \langle \sum_{i=1}^n c_i \Phi (A_i), \sum_{j=1}^n c_j \Phi (A_j) \right \rangle \\
+      &= \Big |\sum_{i=1}^n c_i \Phi (A_i) \Big |^2 \ge 0
+    \end{align*}
+    \vspace{-4.5em}
+
+    which gives us the conclusion.
+
+
+    \textbf{(4)} First of all, we prove that the min function of a non-negative functions $f$ is a positive definite kernel.
+    For $\forall n \in \mathbb{N}$, $x_1, \cdots, x_n \in \mathcal{X}$, $c_1, \cdots, c_n \in \mathbb{R}$, we have:
+
+    \vspace{-4.5em}
+    \begin{align*}
+      \sum_{i=1}^n \sum_{j=1}^n c_i c_j K_f(x_i, x_j) &= \sum_{i=1}^n \sum_{j=1}^n c_i c_j \min(f(x_i), f(x_j)) \\
+      &= \sum_{i=1}^n \sum_{j=1}^n c_i c_j \int_0^{+\infty} \mathbbm{1}_{t \le f(x_i)} (t) \mathbbm{1}_{t \le f(x_j)} (t) dt \\
+      &= \int_0^{+\infty} \Big (\sum_{i=1}^n c_i \mathbbm{1}_{t \le f(x_i)} (t) \Big ) \Big (\sum_{j=1}^n c_j \mathbbm{1}_{t \le f(x_j)} (t) \Big ) dt \\
+      &= \int_0^{+\infty} \Big (\sum_{i=1}^n c_i \mathbbm{1}_{t \le f(x_i)} (t) \Big )^2 \ge 0
+    \end{align*}
+    \vspace{-4em}
+
+    Thus the kernel $K_{fg} = K_f K_g$ is also a positive definite kernel given $f$ and $g$ are non-negative.
+    Then we show that the kernel $K(x, y) = \min(f(x)g(y), f(y)g(x))$ is positive definite.
+
+    \vspace{-4em}
+    \begin{align*}
+      \sum_{i=1}^n \sum_{j=1}^n c_i c_j K(x_i, x_j) &\ge \sum_{i=1}^n \sum_{j=1}^n c_i c_j K_f(x_i, x_j) K_g(x_i, x_j) \ge 0
+    \end{align*}
+    \vspace{-4em}
+
+    which shows that $K(x, y)$ is positive definite.
+
+
+    \textbf{(5)} First of all, we show that the intersection kernel $K_1$ is positive definite.  
+    The indicator function $I$ is defined by $I_A(a) = \mathbbm{1}_{a \in A}$.
+    Then for $\forall n \in \mathbb{N}$, $x_1, \cdots, x_n \in \mathcal{X}$, $c_1, \cdots, c_n \in \mathbb{R}$, we have:
+
+    \vspace{-4em}
+    \begin{align*}
+      \sum_{i=1}^n \sum_{j=1}^n c_i c_j K_1(x_i, x_j) &= \sum_{i=1}^n \sum_{j=1}^n c_i c_j \sum_{a \in E} I_{x_i}(a) I_{x_j}(a) \\
+      &= \sum_{a \in E} \sum_{i=1}^n c_i I_{x_i} (a) \big ( \sum_{j=1}^n c_j I_{x_j} (a) \big ) \\
+      &= \sum_{a \in E} \Big ( \sum_{i=1}^n c_i I_{x_i}(a) \Big )^2 \\
+      & \ge 0
+    \end{align*}
+    \vspace{-4em}
+
+    Now we consider the kernel $K_2 (A, B) = \cfrac{1}{|A \cup B|} = \cfrac{1}{1 - |(E \setminus A) \cap (E \setminus B)|}$.
+    By taking $A' = (E \setminus A)$, $B' = (E \setminus B)$, we have:
+
+    \vspace{-4em}
+    \begin{align*}
+      K_2(A, B) &= \cfrac{1}{1 - |A' \cap B'|} \\
+      &= \sum_{k=0}^\infty |A' \cap B'|^k \mbox{\quad (positive definite kernels)}
+    \end{align*}
+    \vspace{-4em} 
+
+    So we conclude that $K_2$ is also positive definite by using the same argument in (2). 
+    We deduce that $K(A, B) = K_1(A, B) K_2(A, B) = \cfrac{|A \cap B|}{|A \cup B|}$ is also positive definite.
+
+
+    \section*{Exercise 2}
+
+    \textbf{(1)} For $\forall n \in \mathbb{N}$, $x_1, \cdots, x_n \in \mathcal{X}$, we note the gram matrix associated with $K_1$ is $\mathbb{K}_1$, the one associated with $K_2$ is $\mathbb{K}_2$. 
+    Thus the gram matrix associated with the defined kernel is simply $\mathbb{K} = \alpha \mathbb{K}_1 + \beta \mathbb{K}_2 $.
+    For all vectors $c \in \mathbb{R}^n$, we have:
+
+    \vspace{-4em}
+    \begin{align*}
+      c^T \mathbb{K} c &= c^T \Big (\alpha \mathbb{K}_1 + \beta \mathbb{K}_2 \Big ) c \\
+      &= \alpha c^T \mathbb{K}_1 c + \beta c^T \mathbb{K}_2 c \\
+      &\ge 0 \mbox{\quad } (K_1, K_2 \mbox{ positive definite}) 
+    \end{align*}
+    \vspace{-4em}
+
+    Its RKHS $\mathcal{H}$ is the sum of the two RKHSs of $K_1$ and $K_2$, which contains all the functions of the form:
+    $f_x = K(x, \cdot) = \alpha K_1 (x, \cdot) + \beta K_2 (x, \cdot)$.
+
+    \textbf{(2)} For $\forall n \in \mathbb{N}$, $x_1, \cdots, x_n \in \mathcal{X}$, $c_1, \cdots, c_n \in \mathbb{R}$, we have:
+
+    \vspace{-4em}
+    \begin{align*}
+      \sum_{i=1}^n \sum_{j=1}^n c_i c_j K(x_i, x_j) &= \sum_{i=1}^n \sum_{j=1}^n  \left \langle c_i \Phi(x_i), c_j \Phi(x_j) \right \rangle_{\mathcal{H}} \\
+      &= \left \langle \sum_{i=1}^n c_i \Phi (x_i), \sum_{j=1}^n c_j \Phi (x_j) \right \rangle_{\mathcal{H}} \\
+      &= \Big | \sum_{i=1}^n c_i \Phi (x_i) \Big |_\mathcal{H}^2 \ge 0
+    \end{align*}
+    \vspace{-4em}
+
+    Its RKHS $\mathcal{H}$ is the set of all functions of the form: $\{f_x: \mathcal{X} \to \mathbb{R} | f_x (y) = \left \langle \Phi (x), \Phi (y) \right \rangle, x \in \mathcal{X}\}$.
+
+    \section*{Exercise 3} 
+
+    \textbf{(1)} First of all, we show that the bilinear form defines an inner product on $\mathcal{H}$, which means that $\left \langle f, f \right \rangle_{\mathcal{H}} = 0$ if and only if $f = 0$.
+    Since $f$ is absolutely continuous and $f(0) = 0$, we have:
+
+    \vspace{-4em}
+    \begin{align*}
+      f(x) &= \int_{0}^x f'(t) dt = \int_0^1 f'(t) \mathbbm{1}_{0 \le t \le x} dt 
+    \end{align*}
+    \vspace{-4em}
+
+    By Cauchy-Schwartz inequality:
+
+    \vspace{-4em}
+    \begin{align*}
+      |f(x)| &= |\int_0^1 f'(t) \mathbbm{1}_{0 \le t \le x} dt| \\
+      &\le \big (\int_0^1 f'(t)^2 dt \big )^{1/2} \big (\int_0^1 \mathbbm{1}_{0 \le t \le x} dt \big )^{1/2} \\
+      &= \|f\| \sqrt{x}
+    \end{align*}
+    \vspace{-4em}
+
+    So $\|f\| = 0$ if and only if $f = 0$. What's more, $|f(x) \le \|f\|$ is hold.
+
+    Then we show that $\mathcal{H}$ is complete, which means that every cauchy sequence in $\mathcal{H}$ converges in $\mathcal{H}$. 
+    We take a Cauchy sequence $\{f_n\}$ in the well-defined norm, then $\{f'_n\}$ is a Cauchy sequence in $L^2 [0, 1]$, 
+    hence the limit $g = \lim_{n \to \infty} g_n \in L^2 [0, 1]$. We define a function $f = \lim_{n \to \infty} f_n$. 
+    Since $f(x) = \lim_{n \to \infty} f_n (x) = \lim_{n \to \infty} \int_0^x f'_n (t)dt = \int_0^x g(t) dt$, according to the absolutely continuity, we have $f' = g$ almost everywhere, 
+    hence $f' \in L^2 [0, 1]$. What's more, $f(0) = \lim_{n \to \infty} f_n (0) = 0$, so we conclude that $f \in \mathcal{H}$, and then we have $\mathcal{H}$ is a RKHS.
+
+    Now we find the reproducing kernel associated with $\mathcal{H}$.
+
+    Given a function $f \in \mathcal{H}$, we have $f(x) = \left \langle f, k_x \right \rangle = \int_0^1 f'(t) k_x'(t) dt$ and $f(x) = \int_0^1 f'(t) \mathbbm{1}_{t \le x} dt$. 
+    Thus the kernel can be found by solving the following PDE:
+
+    \vspace{-2em}
+    $$
+    \begin{cases} 
+      k'_x(t) = \mathbbm{1}_{t \le x} \\
+      k_x (0) = 0
+    \end{cases}
+    $$
+    \vspace{-2em}
+
+    Thus the solution is:
+
+    \vspace{-2em}
+    $$
+    K(x, y) = k_y (x) = min(x, y)
+    $$
+    \vspace{-2em}
+
+    \textbf{(2)} We proved in the previous exercise that $\mathcal{H}$ is a RKHS. Now we find its associated reproducing kernel.
+
+    Given a function $f \in \mathcal{H}$, we have:
+
+    \vspace{-4em}
+    \begin{align*}
+      f(x) = \left \langle f, k_x \right \rangle &= \int_0^1 f'(t) k_x'(t) dt \\
+      &= f(t)k'_x(t) \Big |_0^1 - \int_0^1 f(t) k''_x(t)dt \\
+      &= -\int_0^1 f(t)k''_x(t) dt
+    \end{align*}
+    \vspace{-4em}
+
+    What's more, we have $f(x) = \int_0^1 f(t) \delta_x dt$. So the kernel function can be found by solving the following PDE:
+    
+    \vspace{-2em}
+    $$
+    \begin{cases} 
+      k''_x(t) = -\delta_x \\
+      k_x (0) = k_x(1) = 0
+    \end{cases}
+    $$
+    \vspace{-2em}
+
+    Thus the solution is:
+
+    \vspace{-2em}
+    $$
+    K(x, y) = k_y (x) =
+    \begin{cases} 
+      (1 - y) x \mbox{\quad \quad x} \le \mbox{y} \\
+      (1 - x) y \mbox{\quad \quad x} > \mbox{y}
+    \end{cases}
+    $$
+    \vspace{-2em}
+
+    \textbf{(3)} Given the new inner product, we have:
+
+    \vspace{-4em}
+    \begin{align*}
+      |f(x)|^2 &= |\int_0^1 f'(t) \mathbbm{1}_{0 \le t \le x} dt|^2 \\
+      &\le \big (\int_0^1 f'(t)^2 dt \big ) \big (\int_0^1 \mathbbm{1}_{0 \le t \le x} dt \big ) \\
+      &\le \big (\int_0^1 f'(t)^2 dt + \int_0^1 f(t)^2dt \big ) \big (\int_0^1 \mathbbm{1}_{0 \le t \le x} dt \big ) \\ 
+      &= \|f\|^2 x
+    \end{align*}
+    \vspace{-4em}
+
+    Again we have $\|f\| = 0$ if and only if $f = 0$ and $|f(x) \le \|f\|$ is bounded.
+    We have already proved that $\mathcal{H}$ is complete thus we deduce that $\mathcal{H}$ is also a RKHS.
+ 
+    Now we find the reproducing kernel associated with $\mathcal{H}$.
+
+    \vspace{-4em}
+    \begin{align*}
+      f(x) = \left \langle f, k_x \right \rangle &= \int_0^1 f(t) k_x(t) + f'(t) k_x'(t) dt \\
+      &= \int_0^1 f(t) k_x(t) dt + \int_0^1 k'_x(t) d(f(t)) \\
+      &= \int_0^1 f(t) k_x(t) dt + f(t)k'_x(t) \Big |_0^1 - \int_0^1 f(t) k''_x(t) dt \\
+      &= \int_0^1 f(t) \big (k_x(t) - k''_x(t) \big ) dt 
+    \end{align*}
+    \vspace{-4em}
+
+    So the kernel function can be found by solving the following ODE:
+    
+    \vspace{-2em}
+    $$
+    \begin{cases} 
+      k_x(t) - k''_x(t) = \delta_x \\
+      k_x (0) = k_x(1) = 0
+    \end{cases}
+    $$
+    \vspace{-2em}
+
+    \section*{Exercise 4}
+
+    \textbf{(a)} Given that $l_y$ is a convex loss function, the constrained problem is a convec problem in $f$
+    for which the strong duality holds. In particular $f$ solves the problem if and only if it solves for some dual parameter
+    $\lambda$ the unconstrained problem:
+
+    \vspace{-3em}
+    $$
+    \min_{f \in \mathcal{H}_K} \frac{1}{n} \sum_{i=1}^n l_{y_i} (f(x_i)) + \lambda \|f\|_{\mathcal{H}_K}^2
+    $$
+    \vspace{-3em}
+
+    and complimentary slackness holds. 
+    
+    By using the Representer Theorem, the optimal solution $f^*$ admits a representation of the form:
+    $f^* (\cdot) = \sum_{i=1}^n \alpha_i k(\cdot, x_i)$. Suppose that $K$ is the gram matrix of $x$, the optimization problem can be written as:
+
+    \vspace{-3em}
+    $$
+    \min_{\alpha \in \mathbb{R}^n} R(K\alpha) + \lambda \alpha^T K \alpha
+    $$
+    \vspace{-3em}
+
+    where $R: \mathbb{R}^n \to \mathbb{R}$ is a function decided by the choice of $l$.
+
+    \textbf{(b)} The Fenchel-Legendre transform $R^*$ is:
+
+    \vspace{-4em}
+    \begin{align*}
+      R^* (u) &= \sup_{x \in \mathbb{R}^n} x^T u - R(x) \\
+      &= \sup_{x \in \mathbb{R}^n} \sum_{i=1}^n ( x_i u_i ) - \cfrac{1}{n} \sum_{i=1}^n l_{y_i} (x_i)\\ 
+      &= \frac{1}{n} \sum_{i=1}^n l_{y_i}^* (u_i) 
+    \end{align*}
+    \vspace{-4em}
+
+    Since $y$ takes value from $\{-1, 1\}$, $l^*_{y} (x)$ can be written as $l^* (xy)$. Thus we have:
+
+    \vspace{-3em}
+    $$
+    R^* (u) = \frac{1}{n} \sum_{i=1}^n l^* (y_i u_i) 
+    $$
+    \vspace{-3em}
+
+
+    \textbf{(c)} We define a lagrange variable $\beta \in \mathbb{R}^n$. Let $g(\alpha) = \lambda \alpha^T K \alpha$ and then the dual problem of (3) is written as:
+
+    \vspace{-4em}
+    \begin{align*}
+    l(\beta) &= \inf_{u \in \mathbb{R}^n, \alpha \in \mathbb{R}^n} R(u) + g(\alpha) + \beta^T (u - K\alpha) \\
+    &= \inf_{u \in \mathbb{R}^n} \big ( R(u) + \beta^T u \big ) + \inf_{\alpha \in \mathbb{R}^n} \big ( g(\alpha) - (K^T \beta)^T \alpha \big ) \\
+    &= -\sup_{u \in \mathbb{R}^n} \big ( - \beta^T u - R(u) \big ) - \sup_{\alpha \in \mathbb{R}^n} \big ( (K^T \beta)^T \alpha - g(\alpha)  \big ) \\
+    &= -R^* (-\beta) - g^* (K^T \beta)
+    \end{align*}
+    \vspace{-4em}
+
+    Now we calculate $g^*$:
+
+    \vspace{-2em}
+    $$
+    g^*(y) = \sup_{x \in \mathbb{R}^n} x^T y - \lambda x^T K x
+    $$
+    \vspace{-2em}
+
+    The optimal $x^*$ is found when the gradient of $f(x) = x^T y - \lambda x^T K x$ equals to 0, i.e.
+
+    \vspace{-2em}
+    $$
+    \cfrac{ \partial f(x)}{\partial x} = y - 2\lambda Kx = 0
+    $$
+    \vspace{-2em}
+
+    Thus $x^* = \frac{1}{2\lambda} K^{-1} y$. We put $x^*$ in $g^*$ and we have:
+
+    \vspace{-2em}
+    $$
+    g^*(y) = \frac{1}{4 \lambda} y^T K^{-1} y
+    $$
+    \vspace{-2em}
+
+    So the dual problem of (3) is:
+
+    \vspace{-2em}
+    $$
+    - R^* (-\beta) - g^* (K^T \beta) = - \frac{1}{n} \sum_{i=1}^n l_{y_i}^* (-\beta_i) - \frac{1}{4 \lambda} \beta^T K \beta
+    $$
+    \vspace{-2em}
+
+    We conclude that the dual problem of (3) is:
+
+    \vspace{-2em}
+    $$
+    \max_{\beta \in \mathbb{R}^n} \frac{1}{n} \sum_{i=1}^n l^* (y_i \beta_i) - \frac{1}{4 \lambda} \beta^T K \beta
+    $$
+    \vspace{-2em}
+
+    TODO: explain how to find primal solution after solving the dual problem!!!
+
+
+    \textbf{(d)} We first calculate the Fenchel transform for logistic loss:
+
+    \vspace{-2em}
+    $$
+    l^* (yu) = l^* (z) = \sup_{x \in \mathbb{R}} xz - \log \big ( 1 + e^{-x} \big ) 
+    $$
+    \vspace{-3em}
+
+    The gradient of the function $f(x) = xu - \log (1 + e^{-x})$ is:
+
+    \vspace{-2em}
+    $$
+    \cfrac{\partial f(x)}{\partial x} = z + \cfrac{e^{-x}}{1 + e^{-x}} = z + 1 - \cfrac{1}{1 + e^{-x}} = 0
+    $$
+    \vspace{-3em}
+
+    So we have $x = \log(z+1) - \log (-z)$ when $z \in (-1, 0)$ and:
+
+    \vspace{-2em}
+    $$
+    l^* (z) = z\log(z+1) - z\log(-z) + \log(z+1) = (z+1)\log(z+1) - z\log(z)
+    $$
+    \vspace{-3em}
+
+    Thus the dual can be written as:
+
+    \vspace{-4em}
+    \begin{align*}
+    &\max_{\beta \in \mathbb{R}^n} \cfrac{1}{n} \sum_{i=1}^n \Big((y_i\beta_i + 1) \log(y_i\beta_i + 1) - y_i \beta_i \log(y_i \beta_i) \Big) - \cfrac{1}{4 \lambda} \beta^T K \beta \\
+    &s.t. \mbox{\quad} 0 > y_i \beta_i > -1 \mbox{\quad \quad} \forall i \in \{1, \cdots, n\}
+    \end{align*}
+    \vspace{-4em}
+
+
+    Now we consider the squared hinge loss. 
+
+    \vspace{-2em}
+    $$
+    l^* (yu) = l^* (z) = \sup_{x \in \mathbb{R}} xz - (1 - x)_+^2 
+    $$
+    \vspace{-3em}
+
+    When $1 - x < 0$, $l^* (z) = \sup_{x \in \mathbb{R}} xz$. When $z > 0$, $l^* (z) = \infty$, otherwise $l^* (z) = z$.
+
+    When $1 - x \ge 0$, $l^* (z) = \sup_{x \in \mathbb{R}} xz - (1-x)^2$. When $z > 0$, $l^* (z) = z$, otherwise $l^* (z) = z + \frac{z^2}{4}$.
+
+    We conclude that the Fenchel conjugate of squared hinge loss is $l^* (z) = (z + \frac{z^2}{4}) \mathbbm{1}_{z \le 0}$. Thus the dual problem of (3) can be written as:
+
+    \vspace{-4em}
+    \begin{align*}
+    &\max_{\beta \in \mathbb{R}^n} \cfrac{1}{n} \sum_{i=1}^n \Big (y_i \beta_i + \cfrac{y_i^2 \beta_i^2}{4}\Big ) - \cfrac{1}{4 \lambda} \beta^T K \beta \\
+    &s.t. \mbox{\quad} y_i \beta_i \le 0  \mbox{\quad \quad} \forall i \in \{1, \cdots, n\}
+    \end{align*}
+    \vspace{-4em}
+
+  \end{document}

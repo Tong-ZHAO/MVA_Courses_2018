@@ -1,0 +1,276 @@
+\documentclass[11pt]{article}
+
+\usepackage{natbib}
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{stmaryrd}
+\usepackage{diagbox}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{amsthm}
+\usepackage{textcomp}
+\usepackage{setspace}
+\usepackage[a4paper,margin=2cm]{geometry}
+\setcounter{MaxMatrixCols}{20}
+\usepackage{tabularx}
+
+\usepackage{float}
+\usepackage{empheq}
+\usepackage{siunitx}
+
+\usepackage{algorithmic}
+\usepackage{algorithm}
+
+\usepackage{hyperref}
+\usepackage{url}
+\renewcommand{\baselinestretch}{1.3} 
+
+% \setlength{\voffset}{-0.75in}
+% \setlength{\headsep}{5pt}
+\usepackage{mathtools}
+
+\addtocontents{toc}{\protect\renewcommand*\protect\addvspace[1]{}}
+\setcounter{tocdepth}{2}
+
+\setlength{\parindent}{0em}
+\setlength{\parskip}{0.5em}
+
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\setlength{\headheight}{15.2pt}
+\pagestyle{fancy}
+\graphicspath{{imgs/}}
+
+\fancyhf[HL]{Tong \textsc{ZHAO}}
+\fancyhf[HC]{}
+\fancyhf[HR]{Project of Advanced Medical Imaging}
+\fancyhf[FL]{}
+\fancyhf[FC]{}
+\fancyhf[FR]{\thepage/\pageref{LastPage}}
+
+\title{A Riemannian Statistical Shape Model using Differential Coordinates}
+\author{Tong Zhao}
+\date{\today}
+
+\usepackage{natbib}
+\usepackage{graphicx}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+\newpage
+
+\section{Introduction}
+
+Given a set of shapes, a statistical shape model aims to understand the geometric variability of their structures,
+which allows us to analyse or generate new shapes. 
+It is widely used in many fields, like the recognition and classification of objects in images, disease diagnosis, metric design in shape spaces and so on.
+There are also various tasks, for example, obtain a distance metric between shapes, estimate mean shape and variance from a set of shapes, etc.
+
+The authors of the article \cite{Von2017An} proposed a novel Riemannian framework using differential coordinates for shape analysis, which is able to account for the nonlinearity in shape variation.
+In this project, we studied the proposed method and several related algorithms.
+By comparing their advantages and disadvantages, we conclude briefly their context of use. 
+
+The report is organised as following:
+
+\vspace{-1em}
+\begin{itemize}
+  \setlength\itemsep{0.1em}
+  \item the section 2 goes through widely-used statistical shape models
+  \item the section 3 describes the proposed algorithm in \cite{Von2017An} and their experiments
+  \item the section 4 compares all the detailed methods from different aspects
+  \item the section 5 concludes the report
+\end{itemize}
+\vspace{-1em}
+
+\section{Related Methods}
+
+There are two most important elements for embedding shapes, i.e. the embedding space and the distance metric.
+Depending on the choices, we need to make some assumptions of the given set of shapes.
+
+\paragraph{Euclidean Space with Linear Metric}
+The simplest choice is to embed shapes in an euclidean space with euclidean distance, namely Point Distribution Model \cite{Cootes92trainingmodels}.
+It is proposed by Cootes et al. in 1992 and it is widely used even till now.
+After normalizing and centralizing the data, the mean shape of the given set is computed directly by the average of all shapes.
+Then the variation is computed by applying a PCA on the covariance matrix.
+The corresponding assumption of this method is that the set of permissible shapes
+form a Gaussian distribution, i.e., all possible shapes can be written as a linear combination of a set of eigenshapes obtained by doing PCA on the training data set.
+However, it is not realizable in most cases.
+
+\paragraph{Euclidean Space with Non-linear Metric}
+While PDM remains a linear model, many nonlinear models are proposed to make the model robust and powerful.
+Kernel methods are one of the choices \cite{rathi2006comparative}. The basic idea of this method is to map nonlinearly the data into a potentially infinite dimensional latent space and then PCA is performed on the transfered shape set.
+Thus we can consider that the kernels define the distance metrics on an euclidean space. 
+There are many choices of kenrels, for instance, gaussian kernel, polynomial kernel, Laplacian kernel, etc.. What's more, the choice is not trivial at all.
+
+\paragraph{Euclidean Space with Invariant Metric}
+
+Instead of considering connectivity-based distance, we can also use some invariant metrics which allow us to find the statistical model \cite{rumpf2015variational}.
+For instance, a shape space with Hausdorff distance is defined by:
+
+\vspace{-1em}
+$$
+d_H (S_1, S_2) = \max \{\sup_{x \in S_1} \inf_{y \in S_2} d(x,y), sup_{y \in S_2} \inf_{x \in S_1} d(x,y)\}
+$$
+\vspace{-1em}
+
+where $S_1$ and $S_2$ are two shapes, and $d$ is the metric like what we mentioned. 
+We find the mean shape by minimizing the functional: $\bar{S} = \mbox{argmin}_{\tilde{S}} \sum_{i=1}^n d(S_i, \tilde{S})$.
+Then the gradient of the shape distance functional at the mean shape $\bar{S}$ is regarded as shape variation of the average
+and it is used to analyse its dominant modes of variation. 
+
+Another choice is Gromov–Hausdorff distance, which is defined by:
+
+\vspace{-1em}
+$$
+d_{GH} (S_1, S_2) = \frac{1}{2} \inf_{\phi: S_1 \to S_2, \psi: S_2 \to S_1} \sup_{y_i \in \phi(S_1), \psi (y_i) = x_i} \big |d_{S_1} (x_1, x_2) - d_{S_2} (y_1, y_2) \big|
+$$
+\vspace{-1em}
+
+However, these methods suffer from the non-linear and high-dimensional optimization problems which have many local minimas and are not numerical stable.
+
+\paragraph{Non-Euclidean Space with Non-linear Metric}
+Some more sophiscated methods are proposed which embed the shapes in non-euclidean spaces.
+A common choice is to consider the medial axis representations with Lie algebra metrics.
+The shape is represented by a polygonal lattice and spheres around each vertex.
+We can estimate a transformation matrix $R \in \mbox{SIM} (d)$ and convert it to an element $W \in \mathfrak{sim} (d)$ by applying a logarithmic map.
+So the mean shpae can be found by averaging all logarithmic maps of transformations and converting it to the defined space by applying exponential map.
+The variation is then obtained by using PCA on the logarithmic maps.
+
+\paragraph{Physical Models} Taking into consideration the physical properties, physical models play an important role in real applications.
+Two of the most famous algorithms are Elasticity-based shape analysis and Viscous fluid-based shape analysis \cite{rumpf2015variational}.
+Both methods minimize the energy during the deformation from one shape to another. 
+While elasticity-based method considers one single deformation from one shape to another, the fluid-based one considers a sequence of deformations within a time interval $[0, 1]$,
+which implies an increase of the dimension of the variational problem.
+These models are efficient and powerful, in spite of its numerical issues and non-convexity property.
+
+\paragraph{Deep Learning Methods} With the great success of deep learning methods in many domains, some researchers begin apply deep learning methods to solve the statistical shape analysis problems.
+Scarselli et al. designed a Recurrent Neural Network (RNN) which learns geoemtric features on a graph in 2005 \cite{gori2005new}, which is recognized as the first attempt to use deep learning methods on shapes.
+Encouraged by the inscreaing computional compability and the invention of advanced gradient descent algorithms, more and more researchers studied on deep learning methods \cite{bronstein2017geometric} \cite{monti2017geometric}.
+Several models, i.e. Convolutional neural network (CNN), Graph neural network (GNN) and AutoEncoders are adapted to statistical shape analysis as well.
+
+\section{Algorithm}
+
+In this project, we focus on the method proposed by Von et al. in 2017, which explores a non-euclidean space with non-linear metric.
+First of all we describe the embedding space, namely the differential coordinate space, and then its intrinsic distance metric. 
+Finally we conclude the experiments done by the authors.
+
+\subsection{Differential Coordinates}
+
+\paragraph{Definition}
+
+Given $\phi: S_0 \to S$ where $S_0, S \in \mathbb{R}^3$ a deformation from one shape to another, the differential coordinate of point $x_i \in S_0$ is defined as the first order taylor expansion of the gradient $\delta \phi |_{x_i}$.
+A point in $\mathbb{R}^3$ is then mapped into $\mathbb{R}^{3 \times 3}$. Give a set of landmarks, we can then embed them into differential coordiante system.
+
+\paragraph{Motivation} 
+
+From the definition we can observe that the differential coordinates represent the deformation within an infinitesimal neighborhood.
+It is invariant from any rigid transformations. 
+
+\paragraph{Inverse Map}
+
+Another advantage of differential coordinates is that the inverse map can be solved efficiently by solving a Poisson equation.
+Given an element $\xi$ in differential coordinate space, the inverse element $\phi$ in the space of deformation $C$ is found by $\pi (\xi) = \mbox{argmin}_{\phi \in C} = \frac{1}{2} \int_{\mathbb{R}^3} \|  \nabla\phi -  \xi \|^2 dV$.
+Thus we need only to solve the linear system $\Delta \phi = \nabla \cdot \xi$.
+
+\subsection{Intrisic Distance}
+
+\paragraph{Decomposition}
+
+Given the embedding space, we need to define an intrinsic distance metric. Given a deformation $\phi$ and a shape $M \in \mathbb{R}^3$, the differential coordinate tensor can be composed as: $\phi(x) = RU$ for $\forall x \in M$, where $R$ is a special orthogonal matrix and $U$ a symmetric positive-definite matrix.
+So the deformation tensor $\phi(x)$ is defined in the space $G:= \mbox{SO}(3) \times \mbox{Sym}^+ (3)$. 
+
+\paragraph{Distance in $\mbox{SO}(3)$}
+
+We note \textit{exp} the matrix exponential operation and \textit{log} the matrix logarithm operation, a well defined distance in $\mbox{SO}(3)$ is: $d_{SO(3)}(R_1, R_2) = \|log (R_1^T R_2)\|_F$ for $\forall R_1, R_2 \in \mbox{SO}(3)$.
+It is deduced by the corresponding Lie algebra $\mathfrak{so} (3)$.
+
+\paragraph{Distance in $\mbox{Sym}^+ (3)$}
+
+Given two matrices $U_1, U_2 \in \mbox{Sym}^+ (3)$, the distance is defined by $d_{Sym^+ (3)}(U_1, U_2) = \|log U_2 - log U_1\|_F$, which is derived from the corresponding Lie algebra $\mathfrak{sym}^+ (3)$.
+
+\paragraph{Distance in $G$}
+
+The final distance is thus defined by $d_G = d_{SO(3)} + d_{Sym^+ (3)}$. This metric is bi-invariant
+and thus comes with strong theoretical properties.
+
+\subsection{Algorithm}
+
+\paragraph{Fréchet Mean} 
+
+Given the embedding space and the intrinsic metric, the Fréchet mean is the minimizer of the functional: $\xi^* = \mbox{argmin}_{\xi \in D} \int_M \sum_{i=1}^n d_G(\xi(V), \xi_i(V))^2 dV$,
+where $M$ is the template shape, $D$ is the differential coordinate space and $\xi_1, \cdots, \xi_n$ are all the deformations in $D$. Then the optimal deformation $\phi^*$ is calculated by mapping inversely $\xi^*$.
+
+\paragraph{Principal Geodesic Analysis}
+
+In order to calculate the variation of the shapes, Principal Geodesic Analysis (PGA) is applied on the tangent space $T_\mu \mathcal{F}$ of the intrinsic mean $\xi^*$.
+We map an element in $G$ to $T_\mu \mathcal{F}$ by Riemannian logarithm noted by $Log$. Then the covariance operator is: $C(\cdot) = \frac{1}{n} \sum_{i=1}^n v_i \int_M \left \langle \cdot, v_i(x) \right \rangle_{\mu (x)} dV$, where $v_i = Log_\mu (\xi_i) $.
+PGA is then performed on $C$ to approximate the main modes of variation with each eigenvalue encoding the corresponding
+variances.
+
+\subsection{Experiments}
+
+In order to validate the proposed algprithm, the authors designed three experiments on two datasets, namely the Osteoarthritis Initiative (OAI) dataset and the FAUST dataset \cite{bogo2014faust}.
+OAI data are preprocessed by the author manually.
+
+\paragraph{Statistical Analysis}
+
+The proposed method is compared with Shell PCA \cite{zhang2015shell}, one of the state-of-art method. They calculated the Fréchet mean by both methods on both datasets.
+We can observe that from the result, the stability and speed of the proposed method surpass the performance of Shell PCA. What's more, the quantitative results of the Fréchet mean are evaluated by the the cumulative elasticity-based distance, which is the objective function of Shell PCA.
+The result shows that the proposed method gets a better result in 18\% of the cases.
+
+
+\paragraph{Classification}
+
+The proposed method is compared with Point Distribution Model. The features are extracted by using the first 115 eigenvalues, which are calculated by PGA on the covariance operators.
+A SVM is then trained to classify healthy and severely diseased femora. Again the proposed method gives a better classification result.
+
+
+\paragraph{Model Validation}
+
+The proposed method is compared with Point Distribution Model and the method proposed in \cite{hefny2015liver}, which is calculated based on SE(3).
+In terms of specifity and generalization ability, the distance metric plays an important role, thus the authors used three metrics: $L_2$ distance, $d_G$ and $W$ the distance proposed in Shell PCA.
+In most of the cases, the proposed method gives a better result, which proves the power of their model.
+
+
+\section{Perspective}
+
+In this section we intend to compare the proposed method with other popular methods in terms of their advantages and disadvantages.
+The comparing table is given as below:
+
+\begin{center}
+  \small
+  \begin{tabularx}{17.5cm}{|X|X|X|}
+  \hline
+  \multicolumn{1}{|c|}{\textbf{Method}}     & \multicolumn{1}{c|}{\textbf{Advantages}}                                                & \multicolumn{1}{c|}{\textbf{Disadvantages}}                                                                                                             \\ \hline
+  \textbf{Proposed Method}                 & \begin{tabular}[c]{@{}l@{}}1. Numerically robust\\ 2. Good performance\end{tabular}     & \begin{tabular}[c]{@{}l@{}}1. Need well-localized data\\ 2. Need point-point correspondence\end{tabular}                                                \\ \hline
+  \textbf{PDM}                             & Low computational cost                                                                  & \begin{tabular}[c]{@{}l@{}}1. Need point-point correspondence\\ 2. Linear model\end{tabular}                                                            \\ \hline
+  \textbf{Kernel-based Method}             & Low computational cost                                                                  & \begin{tabular}[c]{@{}l@{}}1. Choice of kernel is not trivial\\ 2. Need point-point correspondence\end{tabular}                                         \\ \hline
+  \textbf{Connectivity-Independent Method} & Get rid of point-point correspondence                                                   & \begin{tabular}[c]{@{}l@{}}1. Large non-convex optimization\\ 2. Numerical issue\end{tabular}                                                           \\ \hline
+  \textbf{Lie-Algebra Based Method}        & \begin{tabular}[c]{@{}l@{}}1. Efficient calculation\\ 2. Geodesic distance\end{tabular} & Need point-point correspondence                                                                                                                         \\ \hline
+  \textbf{Physical Models}                 & Deformable model                                                                        & \begin{tabular}[c]{@{}l@{}}1. Need point-point correspondence\\ 2. Large non-convex optimization\\ 3. High computational cost\end{tabular}              \\ \hline
+  \textbf{Deep Learning Models}            & \begin{tabular}[c]{@{}l@{}}1. Data-adapted model\\ 2. Fast inference speed\end{tabular} & \begin{tabular}[c]{@{}l@{}}1. Need large labeled dataset\\ 2. Overfitting issue\\ 3. Parameter tuning\\ 4. Need point-point correspondence\end{tabular} \\ \hline
+  \end{tabularx}
+\end{center}
+
+We can observe that the proposed method has a rather good performance with a good trade-off between accuracy and efficiency.
+Thus when we have a set of well-localized data with dense correspondence, it should be a good choice.
+
+\section{Conclusion}
+
+In this project we focus on a traditional geometric task: statistical shape analysis.
+We first go through the popular algorithms and give a brief introduction for each of them.
+Then we look in detail the proposed method by Von et al. in 2017 \cite{Von2017An}.
+A comparaison is given at last which shows their advantages and disadvantages.
+We conclude that the proposed method is an efficient state-of-art algorithm and can be applied in many cases.
+
+\newpage
+\bibliographystyle{plain}
+\bibliography{main}
+\end{document}

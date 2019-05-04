@@ -1,0 +1,175 @@
+\documentclass[11pt]{article}
+
+    \usepackage{geometry, amsmath, amsthm, latexsym, amssymb, graphicx}
+    \usepackage{dsfont}
+    \usepackage[utf8]{inputenc}
+    \usepackage[numbered,framed]{matlab-prettifier}
+    \usepackage{filecontents}
+    \usepackage[francais,english]{babel}
+    \usepackage{setspace}
+    \usepackage{verbatim}
+    \usepackage{mathrsfs}
+
+    \renewcommand{\baselinestretch}{1.8} 
+
+    \geometry{margin=1in, headsep=0.25in}
+    \graphicspath{{./imgs/}}
+    
+    \parindent 0in
+    \parskip 12pt
+    
+    \begin{document}
+    
+    \title{HWK3 - Géométrie et espaces de formes}
+    
+    \thispagestyle{empty}
+    
+    \begin{center}
+    {\LARGE \bf Géométrie et Espaces de Formes - Exercice 3}\\
+    \vspace{1em}
+    {\large Tong ZHAO (tong.zhao@eleves.enpc.fr)}\\
+    \end{center}
+
+    \textbf{Exo 3.1}
+
+    (a) Toutes les fonctions $f_n$ prennent leurs valeurs à partir d'un sous-espace séparable de $I$,
+    alors $f$ prend ses valeurs à partir d'un espace engendré par la combinaision linéaire fermée des sous-espaces, qui est séparable.
+    De plus on a pour chaque $t \in I$, $f(t)$ est une limite des fonctions mesurables $f_n(t)$. 
+    Par le théorème de Pettis, on déduit que la fonction $f$ est Bochner mesurable.
+
+    (c) Sachant que $g: B_1 \to B_2$ est une application continue, $g \circ f$ est mésurable. 
+    Par le théorème de Pettis, il nous reste à montrer que $B_2$ est séparable. 
+    
+    La fonction $g$ prend ses valeurs à partir d'un sous-espace fermé séparable $X_1$ dans $B_1$. On suppose que $g(X_1)$ est non-séparable. 
+    Alors il existe une famille d'ensembles ouverts disjoints $(O_i)i \in I$ dans $B_2$ telle que chacun entre eux intersecte $g(X_1)$. 
+    Pour chaque sous-ensemble $I' \subseteq I$, on a un ensemble ouvert $O_{I'} := \cup_{i \in I'} O_i$ dans $B_2$. 
+    Si $I' \neq I''$, $O_{I'} \neq O_{I''}$, ce qui nous montre qu'il y a au moins $2^{|I|}$ tribus boréliennes dans $X_1$.
+    Par contre un espace séparable a au plus $2^{|\mathbb{N}|}$ tribus boréliennes. Donc on en déduit que $g(X_1)$ est séparable et alors $g \circ f$ est Bochner mesurable.
+
+    \textbf{Exo 3.2} 
+
+    On montre tout d'abord que la limite existe:
+
+    \vspace{-4em}
+    \begin{align*}
+      \|\int_I f_n(t) dt - \int_I f_m(t) dt\| &\le \int_I \|f_n(t) - f_m(t)\| dt\\
+      &\le \int_I \|f_n(t) - f(t)\|dt + \int_I \|f(t) - f_m(t)\| dt \\
+      &\to 0 \mbox{\quad} (si \ n,m \to \infty)
+    \end{align*}
+    \vspace{-4em}
+
+    Donc $\int_I f_n$ définit bien une suite de Cauchy qui converge dans $I$, ce qui nous indique que la limite existe.
+    Si on prend une autre suite de fonction $s_n$ et on calcule de même facon sa limite, on obtient à la fin la même limite,
+    donc on en déduit que $\int_I f(t)dt$ ne dépend pas du choix de la suite.
+
+    \textbf{Exo 3.3} 
+
+    (1) On vérifie tout d'abord que $\star$ est une loi interne sur $L^1([0,1],V)$. 
+
+    \vspace{-4em}
+    \begin{align*}
+      \|v \star w\|_1 &= \int_0^1 |v \star w (t)| dt \\
+      &= \int_0^{0.5} |v(2t)| dt + \int_{0.5}^1 |v(2t - 1)| dt \\
+      &= \int_0^1 |v(x)| dx + \int_0^1 |w(x)| dx \\
+      &= \|v\|_1 + \|w\|_1
+    \end{align*}
+    \vspace{-4em}
+
+    Après on calcule $\Phi_1^{v \star w}$.
+
+    \vspace{-4em}
+    \begin{align*}
+      \Phi_1^{v \star w} (x) &= x + \int_0^1 (v \star w)_s \circ \Phi_s^{v \star w} (x) ds \\
+      &= x + \int_0^{\frac{1}{2}} 2w_{2s} \circ \Phi_s^{2w} (x) ds + \int_{\frac{1}{2}}^1 2v_{2s-1} \circ  \Phi_{s-\frac{1}{2}}^{2v} \circ \Phi_{\frac{1}{2}}^{2w} (x) ds
+    \end{align*}
+    \vspace{-4em}
+
+    Par l'unicité de solution de l'équation $\Phi_1^w (x) = x + \int_0^1 w_s \circ \Phi_s^w (x) ds$, on a:
+
+    \vspace{-4em}
+    \begin{align*}
+      \Phi_{\frac{1}{2}}^{2w} (x) &= x + \int_0^{\frac{1}{2}} 2w_s \circ \Phi_s^{2w}(x)ds \\
+      &= x + \int_0^1 w_{\frac{t}{2}} \circ \Phi^{2w}_{\frac{t}{2}} (x) dt \\
+      &= x + \int_0^1 w_{\frac{t}{2}} \circ \Phi^{w}_{t} (x) dt \\ 
+      &= \Phi_1^w (x) 
+    \end{align*}
+    \vspace{-4em}
+
+    \vspace{-4em}
+    \begin{align*}
+      \int_{\frac{1}{2}}^1 2v_{2s-1} \circ  \Phi_{s-\frac{1}{2}}^{2v} \circ \Phi_{\frac{1}{2}}^{2w} (x) ds &= \int_0^1 v_t \circ \Phi^v_t \circ \Phi_1^w (x) dt
+    \end{align*}
+    \vspace{-4em}
+
+    Donc on a:
+
+    \vspace{-4em}
+    \begin{align*}
+      \Phi_1^{v \star w} (x) &= \Phi_1^w (x) + \int_0^1 v_t \circ \Phi^v_t \circ \Phi_1^w (x) dt \\
+      &= \Phi_1^v \circ \Phi_1^w (x) 
+    \end{align*}
+    \vspace{-4em}
+
+    ce qui nous montre que $G_v$ est stable par composition et donc $v \to \Phi_1^V$ est un morphisme de $(L^1([0, 1], V), \star)$ dans $(G_V, \circ)$.
+
+    (2) On fixe $t = 1$, pour tout $v \in L^1 ([0, 1], V)$, $\Phi_1^v$ est un homéomorphisme d'un sous-espace de $\mathbb{R}^d$ par la proposition III.3. 
+    On en déduit que $G_v$ est un groupe d'héomorphismes sur $\mathbb{R}^d$.
+
+    \textbf{Exo 3.4}
+
+    Par la définition, on a $d_G (\varphi, \varphi') = \inf\{\|v\|_1 | v \in L_1 ([0, 1], V),  \varphi' \circ \varphi^{-1} = \Phi_1^v\}$. 
+    On pose $\varphi$, $\varphi'$ et $\varphi'' \in G_V$ et $\epsilon > 0$. 
+    Il existe $v$, $v' \in L_1([0, 1],V)$ tels que: .
+
+    \vspace{-5em}
+    \begin{align*}
+      &\phi_1^{v} \circ \varphi = \varphi' \\
+      & \phi_1^{v'} \circ \varphi' = \varphi'' \\
+      &\|v\|_1 \le d_G (\varphi, \varphi') + \epsilon \\
+      & \|v'\|_1 \le d_G (\varphi', \varphi'') + \epsilon
+    \end{align*}
+    \vspace{-4em}
+
+
+    On a alors $\phi_1^{v \star v'} \circ \varphi = \varphi''$ et:
+
+    \vspace{-4em}
+    \begin{align*}
+      d_G(\varphi, \varphi'') &\le \|v \star v'\|_1 \\
+      &= \|v\|_1 + \|w\|_1 \\
+      &\le d_G(\varphi, \varphi') + d_G(\varphi', \varphi'') + 2 \epsilon
+    \end{align*}
+    \vspace{-4em}
+
+    On obtient donc l'innégalité triangulaire.
+
+    Si $d_G (Id, \phi) = 0$, selon la définition il existe $v \in L^1([0, 1], V)$ tel que $\Phi_1^v (x) = x + \int_0^1 v_s \circ \Phi_s^v (x) ds = x$, ce qui nous montre que $\phi = \Phi_1^v = Id$.
+
+
+    \textbf{Exo 3.5}
+
+    Etant donné un champ de vecteurs $v \in L^1 ([0, 1], V)$, on s'intéresse à trouver une courbe $\gamma \in \mathcal{C}([0,1], \mathbb{R}^d)$ qui résoud le problème:
+
+    \vspace{-2em} 
+    $$
+    \begin{cases}
+      &\gamma(0) = p \\
+      &\dot{\gamma}(t) = v(t) \cdot \gamma(t) \\
+    \end{cases}
+    $$
+    \vspace{-2em} 
+
+    Chaque application $A: L^1([0, 1], V) \to \mathscr{C}([0,1], \mathbb{R}^d)$ définit bien une action sur $M$ et l'action infinitésimale correspondante est le champ de vector $X_p = \frac{d}{dt}|_{t=0} A(t, p)$.
+
+    Selon la proposition III.2, si $v \in L^2([0, 1], V)$ et $q \in \mathbb{R}^d$, il existe une unique solution $\gamma \in \mathscr{C}([0,1],\mathbb{R}^d)$ qui résoud l'EDO $\dot{\gamma}(t) = v(t) \cdot \gamma(t)$, et on a:
+
+    \vspace{-4em}
+    \begin{align*}
+      \Phi_t^v \cdot \gamma_0 &= \gamma_0 + \int_0^t v_s \circ \Phi_s^v (\gamma_0) ds = \gamma_t
+    \end{align*}
+    \vspace{-4em}
+
+
+
+
+    \end{document}

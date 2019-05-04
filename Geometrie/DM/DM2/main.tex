@@ -1,0 +1,251 @@
+\documentclass[11pt]{article}
+
+    \usepackage{geometry, amsmath, amsthm, latexsym, amssymb, graphicx}
+    \usepackage{dsfont}
+    \usepackage[utf8]{inputenc}
+    \usepackage[numbered,framed]{matlab-prettifier}
+    \usepackage{filecontents}
+    \usepackage[francais,english]{babel}
+    \usepackage{setspace}
+    \usepackage{verbatim}
+
+    \renewcommand{\baselinestretch}{1.8} 
+
+    \geometry{margin=1in, headsep=0.25in}
+    \graphicspath{{./imgs/}}
+    
+    \parindent 0in
+    \parskip 12pt
+    
+    \begin{document}
+    
+    \title{HWK2 - Géométrie et espaces de formes}
+    
+    \thispagestyle{empty}
+    
+    \begin{center}
+    {\LARGE \bf Géométrie et Espaces de Formes - Exercice 2}\\
+    \vspace{1em}
+    {\large Tong ZHAO (tong.zhao@eleves.enpc.fr)}\\
+    \end{center}
+
+    \textbf{Exo 2.1} 
+    
+    On considère un espace de Sobolev $H^s(\mathbb{R}^d) \triangleq \{f \in L^2 (\mathbb{R}^d) | \int_{\mathbb{R}^d} |\hat{f}(\xi)|^2 (1 + |\xi|^2)^s d\xi < +\infty\}$ muni un produit scalaire 
+    $\left \langle f, g \right \rangle_{H^s} = \sum_{|\alpha| \le s} \left \langle \partial^\alpha f, \partial^\alpha g \right \rangle_{L^2 (\mathbb{R}^d)}$. 
+    
+    Tout d'abord on montre que $H^s$ est un espace de Hilbert. 
+    Selon la définition de l'espace de Sobolev, la fonction F: $f \to \Big (\sum_{|\alpha| \le s} \|\partial^\alpha f\|^2_{L^2 (\mathbb{R}^d)} \Big )^{1 / 2}$ définit bien une norme $\|\cdot\|_{H^s(\mathbb{R}^d)}$ sur $H^s$.
+    Pour le montrer explicitement, on prend deux fonctions $f$, $g \in H^s (\mathbb{R}^d)$, 
+
+    \vspace{-4em}
+    \begin{align*}
+      \|f + g\|_{H^s(\mathbb{R}^d)} &= \Big (\sum_{|\alpha| \le s} \|\partial^\alpha f + \partial^\alpha g\|^2_{L^2 (\mathbb{R}^d)} \Big )^{1 / 2}\\
+      &\le \Big (\sum_{|\alpha| \le s} \big [\|\partial^\alpha f \|_{L^2 (\mathbb{R}^d)} + \|\partial^\alpha g\|_{L^2 (\mathbb{R}^d)} \big]^2 \Big )^{1 / 2} \\
+      &\le \Big (\sum_{|\alpha| \le s} \|\partial^\alpha f\|^2_{L^2 (\mathbb{R}^d)} \Big )^{1 / 2} +  \Big (\sum_{|\alpha| \le s} \|\partial^\alpha g\|^2_{L^2 (\mathbb{R}^d)} \Big )^{1 / 2}  \\
+      &= \|f\|_{H^s(\mathbb{R}^d)} +  \|g\|_{H^s(\mathbb{R}^d)} 
+    \end{align*}
+    \vspace{-4em}
+
+    ce qui nous indique que la fonction vérifie l'inégalité triangulaire. Après on montre que l'espace $H^s$ est complete. Posant une suite de Cauchy $\{f_i\}_{i=1}^\infty \subset H^s$, l'ensemble $\{\partial^\alpha f_i\}_{i=1}^\infty$ est une suite de Cauchy dans l'espace $L_2 (\mathbb{R}^d)$ pour tout $\|\alpha\| \le s$. Sachant que l'espace $L_2$ est complet,
+    il existe une fonction $g_\alpha \in L_2 (\mathbb{R}^2)$ telle que $g_\alpha - \lim_{i \to \infty} \partial^\alpha f_i \to 0$. Pour tout $\phi \in C^\infty (\mathbb{R}^d)$, 
+
+    \vspace{-4em}
+    \begin{align*}
+      \left \langle f, \partial^\alpha \phi \right \rangle &= \lim_{i\to \infty} \left \langle f_n, \partial^\alpha \phi \right \rangle \\
+      &= (-1)^{|\alpha|} \lim_{i \to \infty} \left \langle \partial^\alpha f, \phi \right \rangle \\
+      &=(-1)^{|\alpha|} \lim_{i \to \infty} \left \langle g_\alpha, \phi \right \rangle 
+    \end{align*}
+    \vspace{-5em}
+
+    ceci indique que $f \in H^s$ existe et $\lim_{i \to \infty} f_i  \to f$. On en déduit que $H^s (\mathbb{R}^d)$ est un espace de Hilbert.
+
+    Pour tout $\alpha \in \mathbb{R}^d$, la fonction d'évaluation $\delta^\alpha: h \to \left \langle h(x), \alpha \right \rangle$ est une forme linéaire, grâce à la propriété du produit scalaire dans $L_2$. Si $s > \frac{d}{2}$, selon le théorème de Sobolev Embedding, $H^s (\mathbb{R}^d) \hookrightarrow C(\mathbb{R}^d)$, la fonction d'évaluation est continue. On en déduit que $H^s$ est un ENR.
+
+    \textbf{Exo 2.2}
+
+    On a $K(x, y) = f(x)^T f(y) = \left \langle f(x), f(y) \right \rangle_{\mathbb{R}^d}$, qui nous indique que $K$ définit bien un noyau, associé un espace de Hilbert $\mathbb{R}^d$ minu un produit scalaire $h: \mathbb{R}^d \to \mathbb{R}$ tel que pour $\forall h_1, h_2 \subset \mathbb{R}^d$, $ \left \langle h_1, h_2 \right \rangle = h_1^T h_2$.
+
+    \textbf{Exo 2.3}
+
+    Sachant que $A$ et $B$ sont deux matrices symétriques positives de taille $n \times n$, on les décompose en éléments propres. Soit $\{\lambda_i^a\}_{i=1}^n$ les valeurs propres de $A$, $\{v_i^a\}_{i=1}^n$ les vecteurs propres associés, on a $A = \sum_{i=1}^n \lambda_i^a v_i^a (v_i^a)^T$. 
+    De la même façon, on décompose $B$ comme $B = \sum_{i=1}^n \lambda_i^b v_i^b (v_i^b)^T$. Donc le produit d'Hadamard de $A$ et $B$ peut s'exprimer comme suit:
+
+    \vspace{-4em}
+    \begin{align*}
+      A \circ B &= \Big (\sum_{i=1}^n \lambda_i^a v_i^a (v_i^a)^T \Big) \circ \Big (\sum_{j=1}^n \lambda_j^b v_j^b (v_j^b)^T \Big)\\
+      &= \sum_{i, j} \lambda_i^a \lambda_j^b \Big ( v_i^a (v_i^a)^T \Big ) \circ \Big ( v_j^b (v_j^b)^T \Big ) \\
+      &= \sum_{i, j} \lambda_i^a \lambda_j^b \Big ( v_i^a \circ v_j^b \Big ) \Big ( v_i^a \circ v_j^b \Big )^T \\ 
+    \end{align*}
+    \vspace{-7em}
+
+    On en déduit que $A \circ B$ est symmétrique et semi-positive définitive. Après on va montrer que le produit est positive. On considère deux matrices $C = v^c (v^c)^T$, $D = v^d (v^d)^T$ (c'est-à-dire leurs valeurs propres sont tous 1), pour chaque vecteur $a$, on a:
+
+    \vspace{-2.5em}
+    $$a^T \Big (v_i^c \circ v_j^d \Big ) \Big (v_i^c \circ v_j^d \Big )^T a = \Big (\sum_k v_{ik}^c v_{jk}^d a_k \Big )^2 \ge 0$$
+    \vspace{-2.5em}
+
+    Sachant que $D$ est positive, il existe $j$ tel que $v_{jk}^d a_k > 0$ pour certains $k$. De même façon, $C$ est positive, donc il existe $i$ tel que $v_{ik}^c v_{jk}^d a_k > 0$ pour certains $k$. Donc pour cette paire $(i, j)$, $a^T \Big (v_i^c \circ v_j^d \Big ) \Big (v_i^c \circ v_j^d \Big )^T a > 0$
+
+    Revenons au cas général, $A \circ B > 0$ ce qui nous indique que le produit est positif définitif.
+
+    Maintenant on pose deux noyau $K_1 (x, y)$ et $K_2 (x, y)$, on voulais montrer que $K(x, y) = K_1 (x,y) \circ K_2 (x, y)$ est un noyau. On a prouvé que $K(x,y)$ vérifie $\sum_{i,j} a_i^* K(x_i, x_j) a_j \ge 0$, il nous reste la propriété $K(x,y) = K(y,x)^T$.
+
+    \vspace{-4em}
+    \begin{align*}
+      K(x, y) &= K_1 (x, y) \circ K_2 (x, y) \\
+      &= \left \langle \phi_1(x), \phi_1(y) \right \rangle \circ \left \langle \phi_2(x), \phi_2(y) \right \rangle  \\
+      &= \Big ( \sum_{i} \phi_{1, i}(x)\phi_{1, i}(y)  \Big ) \circ \Big ( \sum_{j} \phi_{2, j}(x) \phi_{2, j}(y)  \Big ) \\
+      &= \sum_{i,j} \Big( \phi_{1, i}(x) \circ \phi_{2, j}(x) \Big) \Big( \phi_{1, i}(y) \circ \phi_{2, j}(y) \Big) \\
+      &= \sum_{i,j} \phi_{ij} (x) \phi_{ij} (y) \\
+      &= \phi(x)^T \phi(y)
+    \end{align*}
+    \vspace{-5em}
+
+    où $\phi_{ij}(z) = \phi_{1, i}(z) \circ \phi_{2, j}(z)$. Donc $K(y, x)^T = K(x,y)$ et on en conclut que $K(x, y)$ est un noyau.
+
+    \textbf{Exo 2.4}
+
+    On suppose que le noyau $K(x,y)$ est définit sur un ENR dont les opérateurs de translations $\tau: H \to H$ sont des isométries. En prennant $\tau_{-x}: \tau_{-x} h(z) = h(z-x)$ on a:
+
+    \vspace{-2.5em}
+    $$
+      K(x, y) = \left \langle x, y \right \rangle_H = \left \langle \tau_{-x} x, \tau_{-x} y \right \rangle_H  = \left \langle 0, y-x \right \rangle_H = \rho (y-x)
+    $$
+    \vspace{-4em}
+
+    où $\rho(z) = \left \langle 0, z \right \rangle_H$. On en conclut que le noyau $K$ est invariant par translation.
+
+    \textbf{Exo 2.5}
+
+    On considère la fonction $f(x) = \frac{1}{2} e^{-|x|}$ et sa transformée de fourier se calcule comme suit:
+
+    \vspace{-4em}
+    \begin{align*}
+      \hat{f}(\xi) &= \frac{1}{2} \int_{-\infty}^\infty e^{-|x|} e^{-i\xi x}dx \\
+      &= \frac{1}{2} \int_{-\infty}^0 e^{x} e^{-i\xi x}dx + \frac{1}{2} \int_0^{\infty} e^{-x} e^{-i\xi x}dx  \\
+      &= \frac{1}{2} \Big [\frac{e^{(1 - i\xi)x}}{1-i\xi} \Big ]_{-\infty}^0 + \frac{1}{2} \Big [\frac{e^{-(1 + i\xi)x}}{1+i\xi} \Big ]_0^{\infty} \\
+      &= \frac{1}{2} \Big ( \frac{1}{1 - i\xi} + \frac{1}{1 + i \xi} \Big ) \\
+      &= \frac{1}{1 + \xi^2}
+    \end{align*}
+    \vspace{-4em}
+
+    Par la formule d'inversion, on a $\hat(\rho) (\xi) = \frac{1}{2} e^{-|\xi|}$, qui est hermetienne positive. Le théorème de Bochner nous montre que $\rho(r)$ définit bien un noyau positif.
+
+
+
+    \begin{comment}
+    
+    \vspace{-4em}
+    $$\rho (r) = \cfrac{1}{1 + r^2} = \int e^{-t(r^2 + 1)} dt$$
+    \vspace{-4em}
+
+    En prenant $t = u^2$, on a:
+
+    \vspace{-2em}
+    $$\rho (r) = \int e^{-u^2(r^2 + 1)} d(u^2) = \int e^{-u^2 r^2} d(-e^{-u^2})$$
+    \vspace{-4em}
+
+    $\mu(u) = -e^{-u^2}$ est une mesure borélinenne positive finie sur $\mathbb{R_+}$, donc $\rho(r)$ définit un noyau positif.
+
+      Tout d'abord, on montre que le noyau est défini negatif. Un noyau est dit défini negatif si il est symmétrique et pour tout $\{x_1, \cdots, x_m\} \in \mathcal{X}$, $c \in \mathbb{R}^{m \times 1}$ et $1^T c = 0$, on a $c^T K c = 0$
+
+    Prenons $c$ tel que $\sum_{i=1}^m c_i = 0$:
+
+    \vspace{-4em}
+    \begin{align*}
+      \sum_{i,j = 1}^m \|x_i - x_j\|^2 c_i c_j &= \sum_{i,j = 1}^m (x_i - x_j) \cdot (x_i - x_j) c_i c_j \\
+      &= \sum_{i,j = 1}^m (\|x_i\|^2 + \|x_j\|^2 - 2 x_i \cdot x_j) c_i c_j \\
+      &= \sum_{i,j = 1}^m \Big (\|x_i\|^2 + \|x_j\|^2 \Big )c_i c_j - 2 \sum_{i=1}^m c_i x_i \cdot \sum_{j=1}^m c_j x_j \\
+      &\le \sum_{i,j = 1}^m \Big (\|x_i\|^2 + \|x_j\|^2 \Big )c_i c_j \\
+      &= \sum_{j=1}^m c_j \Big (\sum_{i=1}^m c_i \|x_i\|^2) + \sum_{i=1}^m c_i \Big (\sum_{j=1}^m c_j \|x_j\|^2) \\
+      &= 0
+    \end{align*}
+    \vspace{-4em}
+
+    Donc $\|x_i-x_j\|^2$ est un noyau défini negatif. 
+    \end{comment}
+    
+
+
+    \textbf{Exo 2.6}
+
+    On veut montrer que chaque fonction $f \in H$ est continue si $K$ est continue.
+
+    \vspace{-4em}
+    \begin{align*}
+      |f(x) - f(x_0)|^2 &= | \left \langle f, K(x, \cdot) - K(x_0, \cdot) \right \rangle |^2 \\
+      &\le \|f\|^2 \big[K(x, x) - 2 K(x, x_0) + K(x_0, x_0) \big] \qquad \mbox{(Cauchy-Schwarz)}
+    \end{align*}
+    \vspace{-4em}
+
+    Quand $x \to x_0$, la terme $\big[K(x, x) - 2 K(x, x_0) + K(x_0, x_0) \big] \to 0$, donc $|f(x) - f(x_0)|^2 \to 0$, ce qui nous montre que $f$ est continue sur $H$.
+    $K\sigma_x^\alpha \in H$ donc $g(x): x \to K\sigma_x^\alpha$ est continue.
+
+    On considère maintenant la fonction $g(x)$. Sachant que $\mathcal{X}$ est séparable, $g(x) = K(x, \alpha)$ est continue, on a $G = \{g(x)| x \in \mathcal{X}\}$ est séparable.
+    Le span engendré par nombres rationnels est dense dans $G$. Donc $H = \overline{G}$ est séparable.
+
+    \textbf{Exo 2.7 (1)} 
+
+    Pour toute famille de points $x_I$ dans $\mathbb{R}^d$ et toute famille $c_I$ de scalaires, on a:
+
+    \vspace{-4em}
+    \begin{align*}
+      \sum_{i,j\in I} \rho (x_i - x_j)c_i c_j &= \sum_{i,j \in I} c_i c_j \int \cfrac{1}{(\sqrt{2\pi})^d}\ e^{i \left \langle \xi, x_i \right \rangle} \cfrac{1}{(\sqrt{2\pi})^d}\ e^{-i \left \langle \xi, x_j \right \rangle} \hat{\rho} (\xi) d \xi \\
+      &= \cfrac{1}{(2 \pi)^d} \int \Big |\sum_{j \in I} c_j\ e^{-i \left \langle \xi, x_j \right \rangle} \Big|^2 \hat{\rho} (\xi) d \xi
+    \end{align*}
+    \vspace{-4em}
+
+    \textbf{Exo 2.7 (2)} 
+
+    Sachant que $\hat{\rho}(\epsilon)$ est réelle et positive, pour chaque vecteur $c \in \mathbb{R}^d$ ($c \neq 0$), on a:
+    
+    \vspace{-2em}
+    $$c^T K c = \cfrac{1}{(2 \pi)^d} \int \Big |\sum_{j \in I} c_j\ e^{-i \left \langle \xi, x_j \right \rangle} \Big|^2 \hat{\rho} (\xi) d \xi > 0$$
+    \vspace{-2em}
+
+    Donc $K$ est definis potisive. On en déduit que $K$ est inversible. 
+
+    Au cas gaussien, $\rho(x-y) = e^{-\frac{\|x-y\|^2}{2\sigma^2}}$, sa transformée de fourier $\hat{\rho}(\epsilon) = e^{-\frac{\sigma^2 \epsilon^2}{2}}$ est réelle et strictement positive.
+    On en déduit alors le noyau gaussien est inversible.
+
+    \textbf{Exo 2.8}
+
+    On pose $u$ sous la forme $\sum_{i \in I} K(x_, x_i) \alpha_i$ et on réecrit la fonction $J(u)$ en fonction de $\alpha$. Alors on a:
+
+    \vspace{-2em}
+    $$
+      f(\alpha) = \cfrac{1}{2} \alpha^T \mathbb{K} \alpha + \cfrac{\gamma^2}{2} \sum_{i \in I} |\sum_{j \in I} K(x_i, x_j)\alpha_j - a_i|^2 
+    $$
+    \vspace{-2em}
+
+    La différentielle de $f$ en $\alpha$ est donc 
+
+    \vspace{-2em}
+    $$
+      Df_\alpha(h) = \alpha^T \mathbb{K} h - \gamma^2 a_I^T \mathbb{K} h  + \gamma^2 \alpha^T \mathbb{K}^T \mathbb{K} h
+    $$
+    \vspace{-3em}
+
+    Ainsi $Df_\alpha(h) = 0$, si et seulement si $\alpha^T \big (\mathbb{K} + \frac{Id}{\gamma^2} \big ) = a_I^T$, donc on a:
+
+    \vspace{-2em}
+    $$
+    \alpha_I = (\mathbb{K} + \frac{Id}{\gamma^2})^{-1} a_I
+    $$
+    \vspace{-3em}
+
+    Alors on a:
+
+    \vspace{-4em}
+    \begin{align*}
+      J(u^*) &= \frac{1}{2} \alpha_I^T \mathbb{K} \alpha_I + \frac{\gamma^2}{2} \big ( \mathbb{K} \alpha_I - a_I \big )^T \big ( \mathbb{K} \alpha_I - a_I \big ) \\
+      &= \frac{1}{2} \alpha_I^T \mathbb{K} \alpha_I + \frac{\gamma^2}{2} \Big (\mathbb{K} \alpha_I - (\mathbb{K} + \frac{Id}{\gamma^2}) \alpha_I \Big )^T \Big (\mathbb{K} \alpha_I - (\mathbb{K} + \frac{Id}{\gamma^2}) \alpha_I \Big )\\
+      &= \frac{1}{2} \alpha_I^T \mathbb{K} \alpha_I + \frac{1}{2 \gamma^2} \alpha_I^T \alpha \\ 
+      &= \frac{1}{2} \alpha_I^T \Big ( \mathbb{K} + \frac{Id}{\gamma^2} \Big ) \alpha_I
+    \end{align*}
+    \vspace{-4em}
+
+    Quand $\gamma \to \infty$, on retrouve l'appariement exact.
+
+    \end{document}
