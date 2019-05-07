@@ -12,5 +12,5 @@ The course is validated by a data challenge on the [plateform](https://challenge
 
 ## My Project
 
-I worked on the challenge: [Spatiotemporal PM10 concentration prediction by Plume Labs](https://challengedata.ens.fr/participants/challenges/7/ranking/public) with Pierre O. during two months. We ranked the 1st on both the public leaderboard and the academic leaderboard when we passed our presentation. Since we decided to continue working on it until the end, all sources(e.g. codes, slides and reports) will be uploaded after the end of the challenge on the 1st Jan 2020.
+I worked on the challenge: [Spatiotemporal PM10 concentration prediction by Plume Labs](https://challengedata.ens.fr/participants/challenges/7) with Pierre O. during two months. We ranked the 1st on both the public leaderboard and the academic leaderboard when we passed our presentation. Since we decided to continue working on it until the end, all sources(e.g. codes, slides and reports) will be uploaded after the end of the challenge on the 1st Jan 2020.
  
