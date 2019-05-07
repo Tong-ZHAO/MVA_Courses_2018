@@ -1,6 +1,10 @@
-# Apprentissage par Réseaux de Neurones Profonds
+# Apprentissage par Réseaux de Neurones Profonds (Learning From Deep Neural Networks)
 
-Teached by [Stéphane Mallat](https://scholar.google.fr/citations?user=g_YTmSgAAAAJ&hl=en) (ENS Ulm). More details and recorded videos can be found [here](https://www.college-de-france.fr/site/stephane-mallat/course-2018-2019.htm).
+* **Professor**: Teached by [Stéphane Mallat](https://scholar.google.fr/citations?user=g_YTmSgAAAAJ&hl=en) (ENS Ulm). 
+
+* **Website**: More details and recorded videos can be found [here](https://www.college-de-france.fr/site/stephane-mallat/course-2018-2019.htm). 
+
+* **Language**: The course is taught in French. 
 
 ## Objective
 
