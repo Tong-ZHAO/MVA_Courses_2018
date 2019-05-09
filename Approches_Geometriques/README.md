@@ -1,4 +1,4 @@
-# Approches géométriques en apprentissage statistique - l’exemple des données longitudinales
+# Approches Géométriques en Apprentissage Statistique - l’Exemple des Données Longitudinales
 
 * **Professor**: Teached by [Stanley Durrleman](https://scholar.google.com/citations?user=-K2XrGUAAAAJ&hl=en) (INRIA). 
 
